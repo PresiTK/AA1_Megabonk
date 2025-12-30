@@ -8,6 +8,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -207,22 +211,30 @@ fun CharacterListScreen(navController: NavController) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(spacingLarge)
             ) {
-                items(filteredCharacters) { character ->
-                    CharacterCard(
-                        character = character,
-                        imageSizeLarge = imageSizeLarge,
-                        borderWidth = borderWidth,
-                        spacingSmall = spacingSmall,
-                        spacingLarge = spacingLarge,
-                        spacingExtraLarge = spacingExtraLarge,
-                        textSizeSmall = textSizeSmall,
-                        textSizeLarge = textSizeLarge,
-                        surfaceContainerLight = surfaceContainerLight,
-                        onSurfaceLight = onSurfaceLight,
-                        onSurfaceVariantLight = onSurfaceVariantLight,
-                        outlineLight = outlineLight,
-                        tertiaryLight = tertiaryLight
-                    )
+                itemsIndexed(filteredCharacters) { index, character ->
+                    // Animación: cada tarjeta aparece con un pequeño delay basado en su índice
+                    AnimatedVisibility(
+                        visible = true,
+                        enter = fadeIn() + slideInVertically(
+                            initialOffsetY = { it / 2 }
+                        )
+                    ) {
+                        CharacterCard(
+                            character = character,
+                            imageSizeLarge = imageSizeLarge,
+                            borderWidth = borderWidth,
+                            spacingSmall = spacingSmall,
+                            spacingLarge = spacingLarge,
+                            spacingExtraLarge = spacingExtraLarge,
+                            textSizeSmall = textSizeSmall,
+                            textSizeLarge = textSizeLarge,
+                            surfaceContainerLight = surfaceContainerLight,
+                            onSurfaceLight = onSurfaceLight,
+                            onSurfaceVariantLight = onSurfaceVariantLight,
+                            outlineLight = outlineLight,
+                            tertiaryLight = tertiaryLight
+                        )
+                    }
                 }
             }
         }
