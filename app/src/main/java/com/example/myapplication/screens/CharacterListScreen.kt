@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.R
 
+//Esta data class la utilizamos para hacer la plantilla de los characters tiene su nombre, la descripcion del personaje, la arma inicial que tiene el personaje
+//y en imageResId es donde ponemos el drawable que es la imagen del personaje
 data class Character(
     val name: String,
     val initialWeapon: String,
@@ -32,10 +34,12 @@ data class Character(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+//Esta funcion es la encargada de printear por pantalla la lista de characters
 fun CharacterListScreen(navController: NavController) {
+    //Esta variable guarda el texto de la barra de busqueda
     var searchText by remember { mutableStateOf("") }
 
-
+    //Esto es la lista de characters que se basa en la data class que es la plantilla hecha anteriormente
     val characters = listOf(
         Character(
             name = "Monke",
@@ -86,21 +90,23 @@ fun CharacterListScreen(navController: NavController) {
             description = "Gain 1% Crit Chance per level.",
             imageResId = R.drawable.cl4nk
         )
-
     )
 
-
+    //En este if que se iguala en la veriable filtramos los personajes segun el texto que hemos ingresado en la variable searchText
     val filteredCharacters = if (searchText.isEmpty()) {
         characters
     } else {
         characters.filter { it.name.contains(searchText, ignoreCase = true) }
     }
 
+    //Definimos la estructura que tendra la pantalla del mobil de esta screen
     Scaffold(
         topBar = {
+            //La barra superior
             TopAppBar(
                 title = { Text("Character List") },
                 navigationIcon = {
+                    //Boton de volver atras
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -111,13 +117,14 @@ fun CharacterListScreen(navController: NavController) {
             )
         }
     ) { paddingValues ->
+        //Definimos un column para que este centrado todo igual
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Título
+            //Título
             Text(
                 text = "Character List",
                 fontSize = 24.sp,
@@ -126,7 +133,7 @@ fun CharacterListScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Barra de búsqueda
+            //Barra de búsqueda
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -135,6 +142,7 @@ fun CharacterListScreen(navController: NavController) {
                     .border(1.dp, Color.Black)
                     .padding(4.dp)
             ) {
+                //Barra de texto para la busqueda de personajes
                 OutlinedTextField(
                     value = searchText,
                     onValueChange = { searchText = it },
@@ -144,7 +152,7 @@ fun CharacterListScreen(navController: NavController) {
                 )
             }
 
-            // Lista de personajes
+            //Lista de personajes
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -157,6 +165,7 @@ fun CharacterListScreen(navController: NavController) {
 }
 
 @Composable
+//Funcion para dibujar la tarjeta con la informacion del personaje detallada anteriormente
 fun CharacterCard(character: Character) {
     Card(
         modifier = Modifier
@@ -173,6 +182,7 @@ fun CharacterCard(character: Character) {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.Top
         ) {
+            //Imagen del personaje
             Image(
                 painter = painterResource(id = character.imageResId),
                 contentDescription = character.name,
@@ -184,6 +194,7 @@ fun CharacterCard(character: Character) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
+            //Texto del arma inicial
             Text(
                 text = "Initial Weapon: ",
                 fontSize = 13.sp,
@@ -200,7 +211,7 @@ fun CharacterCard(character: Character) {
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                // Nombre del personaje
+                //Nombre del personaje
                 Text(
                     text = character.name,
                     fontSize = 18.sp,
@@ -210,7 +221,7 @@ fun CharacterCard(character: Character) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Descripción del personaje
+                //Descripción del personaje
                 Text(
                     text = character.description,
                     fontSize = 14.sp,

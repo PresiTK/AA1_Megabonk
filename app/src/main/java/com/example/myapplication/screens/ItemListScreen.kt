@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.R
 
+//Definimos la data class como base de los items esta data class contiene el nombre del item, la descripcion y la imagen del item
 data class Item(
     val name: String,
     val description: String,
@@ -31,8 +32,10 @@ data class Item(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemListScreen(navController: NavController) {
+    //Variable para guardar el texto de la barra de busqueda
     var searchText by remember { mutableStateOf("") }
 
+    //Lista para la defimicion de los items utilizando la data class definida anteriormente
     val items = listOf(
         Item(
             name = "Moldy Cheese",
@@ -100,12 +103,14 @@ fun ItemListScreen(navController: NavController) {
         ),
     )
 
+    //Filtra los items segun el texto guardado en la variable searchText si esta vacia se pueden ver todos
     val filteredItems = if (searchText.isEmpty()) {
         items
     } else {
         items.filter { it.name.contains(searchText, ignoreCase = true) }
     }
 
+    //Definimos la estructura de la pantalla de esta screen
     Scaffold(
         topBar = {
             TopAppBar(
@@ -121,12 +126,14 @@ fun ItemListScreen(navController: NavController) {
             )
         }
     ) { paddingValues ->
+        //Este column centra todo el texto en la pantalla
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
+            //Titulo de la pantalla
             Text(
                 text = "Item List",
                 fontSize = 24.sp,
@@ -134,7 +141,7 @@ fun ItemListScreen(navController: NavController) {
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-
+            //Este es el contenedor de la barra de busqueda
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -143,6 +150,7 @@ fun ItemListScreen(navController: NavController) {
                     .border(1.dp, Color.Gray)
                     .padding(4.dp)
             ) {
+                //Definimos el contenedor donde se escribe el texto
                 OutlinedTextField(
                     value = searchText,
                     onValueChange = { searchText = it },
@@ -151,7 +159,7 @@ fun ItemListScreen(navController: NavController) {
                     singleLine = true
                 )
             }
-
+            //Lista de items en vertical para su visualizacion en pantalla
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -164,7 +172,9 @@ fun ItemListScreen(navController: NavController) {
 }
 
 @Composable
+//Funcion utilizada para dibujar las tarjetas de cada item
 fun ItemCard(item: Item) {
+    //Dibujamos las cards en pantalla
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -174,13 +184,14 @@ fun ItemCard(item: Item) {
             containerColor = Color(0xFFEEEEEE)
         )
     ) {
+        //Lo ponemos en una fila para que este alineado la imagen y el texto
         Row(
             modifier = Modifier
                 .padding(12.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
+            //Imagen del item
             Image(
                 painter = painterResource(id = item.imageResId),
                 contentDescription = item.name,
@@ -191,10 +202,11 @@ fun ItemCard(item: Item) {
             )
 
             Spacer(modifier = Modifier.width(16.dp))
-
+            //Hacemos una columna para poder poner las cosas debajo y no quede todo en la misma linea
             Column(
                 modifier = Modifier.weight(1f)
             ) {
+                //Nombre del item
                 Text(
                     text = item.name,
                     fontSize = 18.sp,
@@ -203,7 +215,7 @@ fun ItemCard(item: Item) {
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
-
+                //Descripcion del item
                 Text(
                     text = item.description,
                     fontSize = 14.sp,
