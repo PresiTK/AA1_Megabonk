@@ -17,10 +17,13 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+//Funcion para declarar la login screen
 fun LoginScreen(navController: NavController) {
+    //Creamos dos variables que almacenaran el correo y la password introducidos por el usuario
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+    //Creamos la estructura de la pantalla para la hora de mostrarlo por pantalla este organizado
     Scaffold(
         topBar = {
             TopAppBar(
@@ -35,7 +38,9 @@ fun LoginScreen(navController: NavController) {
                 }
             )
         }
+        //Nos asseguramos de que el contenido no quede por detras de la barra superior
     ) { paddingValues ->
+        //Creamos un column para que este todo en una columna
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -44,7 +49,7 @@ fun LoginScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Email TextField
+            //Creamos el campo de texto para el correo
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -55,7 +60,7 @@ fun LoginScreen(navController: NavController) {
                 singleLine = true
             )
 
-            // Password TextField
+            //Creamos el campo de texto para la contraseña
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -67,7 +72,7 @@ fun LoginScreen(navController: NavController) {
                 singleLine = true
             )
 
-            // Register link
+            //Añadimos un texto que enlazara con la pantalla del register
             Text(
                 text = "register",
                 color = Color(0xFF0066CC),
@@ -77,13 +82,14 @@ fun LoginScreen(navController: NavController) {
                     .clickable { navController.navigate("register") }
             )
 
-            // Login Button
+            //Creamos este boton para que una vez hecho el login se pueda completar al pulsarlo
             Button(
                 onClick = { navController.navigate("welcome") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
             ) {
+                //Le añadimos un texto al boton para que el usuario sepa que es el boton para hacer el login
                 Text(
                     text = "Login",
                     fontSize = 18.sp,

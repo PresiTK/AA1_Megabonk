@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myapplication.Screen
 
+//Esta data class la utilizamos como base de las composiciones del juego guardando el nombre y el tier
 data class Composition(
     val name: String,
     val tier: String
@@ -28,21 +29,25 @@ data class Composition(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+//Funcion para crear las composiciones
 fun CompsListScreen(navController: NavController) {
+    //Variables para guardar el texto de la barra de busqueda y los tiers expandidos
     var searchText by remember { mutableStateOf("") }
     var expandedTiers by remember { mutableStateOf(setOf<String>()) }
 
-    // Datos de ejemplo - puedes reemplazar con tus datos reales
+    //Lista de composiciones
     val compositions = listOf(
-        Composition("Nombre de la composicion", "S"),
-        Composition("Nombre de la composicion", "A"),
-        Composition("Nombre de la composicion", "B"),
-        Composition("Nombre de la composicion", "C"),
-        Composition("Nombre de la composicion", "D")
+        Composition("Monke Best Composition", "S"),
+        Composition("Bandit Advanced Composition", "A"),
+        Composition("Calcium Standard Composition", "B"),
+        Composition("Ogre Normal Composition", "C"),
+        Composition("Fox Worst Composition", "D")
     )
 
+    //Lista de tiers
     val tiers = listOf("S", "A", "B", "C", "D")
 
+    //Structura de la screen
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,14 +62,16 @@ fun CompsListScreen(navController: NavController) {
                 }
             )
         }
+        //Nos asseguramos de que el contenido quede por detras de la barra si la deslizamos
     ) { paddingValues ->
+        //Añadimos un column para que este centrado
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Título
+            //Titulo de la pantalla
             Text(
                 text = "MegaBonk Comps Tier List",
                 fontSize = 24.sp,
@@ -73,13 +80,13 @@ fun CompsListScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Sección de búsqueda
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                //Cuadro de texto de busqueda
                 OutlinedTextField(
                     value = searchText,
                     onValueChange = { searchText = it },
@@ -88,6 +95,7 @@ fun CompsListScreen(navController: NavController) {
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(8.dp))
+                //Texto del campo de busqueda
                 Text(
                     text = "Nombre de la composicion",
                     fontSize = 14.sp,
@@ -95,7 +103,7 @@ fun CompsListScreen(navController: NavController) {
                 )
             }
 
-            // Lista de tiers
+            //Lista de tiers
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -103,6 +111,7 @@ fun CompsListScreen(navController: NavController) {
                     val isExpanded = expandedTiers.contains(tier)
                     val compsInTier = compositions.filter { it.tier == tier }
 
+                    //Fila de tiers
                     TierRow(
                         tier = tier,
                         compositions = compsInTier,
@@ -123,6 +132,7 @@ fun CompsListScreen(navController: NavController) {
 }
 
 @Composable
+//Funcion para la fila de tiers
 fun TierRow(
     tier: String,
     compositions: List<Composition>,
@@ -130,6 +140,7 @@ fun TierRow(
     onToggle: () -> Unit,
     navController: NavController
 ) {
+    //Columna para que ocupe todo el ancho
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,7 +151,7 @@ fun TierRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            // Letra del tier
+            //Letra del tier
             Text(
                 text = tier,
                 fontSize = 32.sp,
@@ -149,7 +160,6 @@ fun TierRow(
                 modifier = Modifier.padding(end = 16.dp)
             )
 
-            // Cuadrado blanco (placeholder para imagen) + Nombre - clickeable para navegar
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -163,6 +173,7 @@ fun TierRow(
                         }
                     }
             ) {
+                //PlaceHolder de la imagen de la composicion
                 Box(
                     modifier = Modifier
                         .size(60.dp)
@@ -172,7 +183,7 @@ fun TierRow(
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                // Nombre de la composición
+                //Nombre de la composición
                 Text(
                     text = compositions.firstOrNull()?.name ?: "Nombre de la composicion",
                     fontSize = 16.sp,
@@ -182,7 +193,7 @@ fun TierRow(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Icono de expandir/colapsar
+            //Icono para hacer mas grande o mas pequeño el tier
             Icon(
                 imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = if (isExpanded) "Colapsar" else "Expandir",
@@ -190,7 +201,7 @@ fun TierRow(
             )
         }
 
-        // Contenido expandido (para futuras composiciones)
+        //Comprobamos si se expande y si es mayor a 1 si es correcto muestra las demas composiciones
         if (isExpanded && compositions.size > 1) {
             Spacer(modifier = Modifier.height(8.dp))
             compositions.drop(1).forEach { comp ->
@@ -212,6 +223,7 @@ fun TierRow(
                             .border(1.dp, Color.Gray)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
+                    //Nombre de la composicion
                     Text(
                         text = comp.name,
                         fontSize = 16.sp,
