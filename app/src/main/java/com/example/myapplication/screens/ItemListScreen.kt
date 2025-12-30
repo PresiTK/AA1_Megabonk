@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,6 +34,32 @@ data class Item(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemListScreen(navController: NavController) {
+    // Obtener el contexto para acceder a los recursos
+    val context = LocalContext.current
+    val resources = context.resources
+
+    // Cargar las dimensiones desde el XML
+    val paddingMedium = resources.getDimension(R.dimen.padding_medium).dp
+    val spacingSmall = resources.getDimension(R.dimen.spacing_small).dp
+    val spacingLarge = resources.getDimension(R.dimen.spacing_large).dp
+    val spacingExtraLarge = resources.getDimension(R.dimen.spacing_extra_large).dp
+    val imageSizeLarge = resources.getDimension(R.dimen.image_size_large).dp
+    val borderWidth = resources.getDimension(R.dimen.border_width).dp
+    val textSizeSmall = resources.getDimension(R.dimen.text_size_small).sp
+    val textSizeLarge = resources.getDimension(R.dimen.text_size_large).sp
+    val textSizeExtraLarge = resources.getDimension(R.dimen.text_size_extra_large).sp
+
+    // Cargar los colores desde el XML
+    val primaryLight = colorResource(id = R.color.primary_light)
+    val onPrimaryLight = colorResource(id = R.color.on_primary_light)
+    val backgroundLight = colorResource(id = R.color.background_light)
+    val onBackgroundLight = colorResource(id = R.color.on_background_light)
+    val surfaceContainerLight = colorResource(id = R.color.surface_container_light)
+    val surfaceContainerHighLight = colorResource(id = R.color.surface_container_high_light)
+    val onSurfaceLight = colorResource(id = R.color.on_surface_light)
+    val onSurfaceVariantLight = colorResource(id = R.color.on_surface_variant_light)
+    val outlineLight = colorResource(id = R.color.outline_light)
+
     //Variable para guardar el texto de la barra de busqueda
     var searchText by remember { mutableStateOf("") }
 
@@ -113,58 +141,93 @@ fun ItemListScreen(navController: NavController) {
     //Definimos la estructura de la pantalla de esta screen
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Item List") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
+            Surface(
+                color = primaryLight
+            ) {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Item List",
+                            color = onPrimaryLight
                         )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = onPrimaryLight
+                            )
+                        }
                     }
-                }
-            )
-        }
+                )
+            }
+        },
+        containerColor = backgroundLight
     ) { paddingValues ->
         //Este column centra todo el texto en la pantalla
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(paddingMedium)
         ) {
             //Titulo de la pantalla
             Text(
                 text = "Item List",
-                fontSize = 24.sp,
+                fontSize = textSizeExtraLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
+                color = onBackgroundLight,
+                modifier = Modifier.padding(bottom = paddingMedium)
             )
             //Este es el contenedor de la barra de busqueda
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .background(Color(0xFFEEEEEE))
-                    .border(1.dp, Color.Gray)
-                    .padding(4.dp)
+                    .padding(bottom = paddingMedium)
+                    .background(surfaceContainerHighLight)
+                    .border(borderWidth, outlineLight)
+                    .padding(spacingSmall)
             ) {
                 //Definimos el contenedor donde se escribe el texto
                 OutlinedTextField(
                     value = searchText,
                     onValueChange = { searchText = it },
-                    label = { Text("Buscar") },
+                    label = {
+                        Text(
+                            "Buscar",
+                            color = onSurfaceVariantLight
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = primaryLight,
+                        unfocusedBorderColor = outlineLight,
+                        focusedTextColor = onSurfaceLight,
+                        unfocusedTextColor = onSurfaceLight
+                    )
                 )
             }
             //Lista de items en vertical para su visualizacion en pantalla
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(spacingLarge)
             ) {
                 items(filteredItems) { item ->
-                    ItemCard(item = item)
+                    ItemCard(
+                        item = item,
+                        imageSizeLarge = imageSizeLarge,
+                        borderWidth = borderWidth,
+                        spacingSmall = spacingSmall,
+                        spacingLarge = spacingLarge,
+                        spacingExtraLarge = spacingExtraLarge,
+                        textSizeSmall = textSizeSmall,
+                        textSizeLarge = textSizeLarge,
+                        surfaceContainerLight = surfaceContainerLight,
+                        onSurfaceLight = onSurfaceLight,
+                        onSurfaceVariantLight = onSurfaceVariantLight,
+                        outlineLight = outlineLight
+                    )
                 }
             }
         }
@@ -173,21 +236,34 @@ fun ItemListScreen(navController: NavController) {
 
 @Composable
 //Funcion utilizada para dibujar las tarjetas de cada item
-fun ItemCard(item: Item) {
+fun ItemCard(
+    item: Item,
+    imageSizeLarge: androidx.compose.ui.unit.Dp,
+    borderWidth: androidx.compose.ui.unit.Dp,
+    spacingSmall: androidx.compose.ui.unit.Dp,
+    spacingLarge: androidx.compose.ui.unit.Dp,
+    spacingExtraLarge: androidx.compose.ui.unit.Dp,
+    textSizeSmall: androidx.compose.ui.unit.TextUnit,
+    textSizeLarge: androidx.compose.ui.unit.TextUnit,
+    surfaceContainerLight: Color,
+    onSurfaceLight: Color,
+    onSurfaceVariantLight: Color,
+    outlineLight: Color
+) {
     //Dibujamos las cards en pantalla
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { /* TODO: Navigate to item details */ }
-            .border(1.dp, Color.Black),
+            .border(borderWidth, outlineLight),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFEEEEEE)
+            containerColor = surfaceContainerLight
         )
     ) {
         //Lo ponemos en una fila para que este alineado la imagen y el texto
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(spacingLarge)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -196,12 +272,12 @@ fun ItemCard(item: Item) {
                 painter = painterResource(id = item.imageResId),
                 contentDescription = item.name,
                 modifier = Modifier
-                    .size(90.dp)
-                    .border(1.dp, Color.Black),
+                    .size(imageSizeLarge)
+                    .border(borderWidth, outlineLight),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(spacingExtraLarge))
             //Hacemos una columna para poder poner las cosas debajo y no quede todo en la misma linea
             Column(
                 modifier = Modifier.weight(1f)
@@ -209,21 +285,20 @@ fun ItemCard(item: Item) {
                 //Nombre del item
                 Text(
                     text = item.name,
-                    fontSize = 18.sp,
+                    fontSize = textSizeLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = onSurfaceLight
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(spacingSmall))
                 //Descripcion del item
                 Text(
                     text = item.description,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray
+                    fontSize = textSizeSmall,
+                    color = onSurfaceVariantLight
                 )
             }
         }
     }
 
 }
-

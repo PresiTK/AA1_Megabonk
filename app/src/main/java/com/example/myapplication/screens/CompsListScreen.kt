@@ -15,10 +15,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.R
 import com.example.myapplication.Screen
 
 //Esta data class la utilizamos como base de las composiciones del juego guardando el nombre y el tier
@@ -31,6 +34,32 @@ data class Composition(
 @Composable
 //Funcion para crear las composiciones
 fun CompsListScreen(navController: NavController) {
+    // Obtener el contexto para acceder a los recursos
+    val context = LocalContext.current
+    val resources = context.resources
+
+    // Cargar las dimensiones desde el XML
+    val paddingMedium = resources.getDimension(R.dimen.padding_medium).dp
+    val spacingSmall = resources.getDimension(R.dimen.spacing_small).dp
+    val spacingMedium = resources.getDimension(R.dimen.spacing_medium).dp
+    val imageSizeSmall = resources.getDimension(R.dimen.image_size_small).dp
+    val borderWidth = resources.getDimension(R.dimen.border_width).dp
+    val textSizeSmall = resources.getDimension(R.dimen.text_size_small).sp
+    val textSizeMedium = resources.getDimension(R.dimen.text_size_medium).sp
+    val textSizeExtraLarge = resources.getDimension(R.dimen.text_size_extra_large).sp
+    val textSizeHuge = resources.getDimension(R.dimen.text_size_huge).sp
+
+    // Cargar los colores desde el XML
+    val primaryLight = colorResource(id = R.color.primary_light)
+    val onPrimaryLight = colorResource(id = R.color.on_primary_light)
+    val backgroundLight = colorResource(id = R.color.background_light)
+    val onBackgroundLight = colorResource(id = R.color.on_background_light)
+    val surfaceContainerLight = colorResource(id = R.color.surface_container_light)
+    val onSurfaceLight = colorResource(id = R.color.on_surface_light)
+    val onSurfaceVariantLight = colorResource(id = R.color.on_surface_variant_light)
+    val outlineLight = colorResource(id = R.color.outline_light)
+    val surfaceContainerHighLight = colorResource(id = R.color.surface_container_high_light)
+
     //Variables para guardar el texto de la barra de busqueda y los tiers expandidos
     var searchText by remember { mutableStateOf("") }
     var expandedTiers by remember { mutableStateOf(setOf<String>()) }
@@ -50,18 +79,29 @@ fun CompsListScreen(navController: NavController) {
     //Structura de la screen
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Comps List") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
+            Surface(
+                color = primaryLight
+            ) {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Comps List",
+                            color = onPrimaryLight
                         )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = onPrimaryLight
+                            )
+                        }
                     }
-                }
-            )
-        }
+                )
+            }
+        },
+        containerColor = backgroundLight
         //Nos asseguramos de que el contenido quede por detras de la barra si la deslizamos
     ) { paddingValues ->
         //Añadimos un column para que este centrado
@@ -69,43 +109,54 @@ fun CompsListScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(paddingMedium)
         ) {
             //Titulo de la pantalla
             Text(
                 text = "MegaBonk Comps Tier List",
-                fontSize = 24.sp,
+                fontSize = textSizeExtraLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
+                color = onBackgroundLight,
+                modifier = Modifier.padding(bottom = paddingMedium)
             )
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = paddingMedium),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 //Cuadro de texto de busqueda
                 OutlinedTextField(
                     value = searchText,
                     onValueChange = { searchText = it },
-                    label = { Text("Buscar") },
+                    label = {
+                        Text(
+                            "Buscar",
+                            color = onSurfaceVariantLight
+                        )
+                    },
                     modifier = Modifier.weight(1f),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = primaryLight,
+                        unfocusedBorderColor = outlineLight,
+                        focusedTextColor = onSurfaceLight,
+                        unfocusedTextColor = onSurfaceLight
+                    )
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(spacingMedium))
                 //Texto del campo de busqueda
                 Text(
                     text = "Nombre de la composicion",
-                    fontSize = 14.sp,
-                    color = Color.Gray
+                    fontSize = textSizeSmall,
+                    color = onSurfaceVariantLight
                 )
             }
 
             //Lista de tiers
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(spacingMedium)
             ) {
                 items(tiers) { tier ->
                     val isExpanded = expandedTiers.contains(tier)
@@ -123,7 +174,17 @@ fun CompsListScreen(navController: NavController) {
                                 expandedTiers + tier
                             }
                         },
-                        navController = navController
+                        navController = navController,
+                        paddingMedium = paddingMedium,
+                        spacingMedium = spacingMedium,
+                        imageSizeSmall = imageSizeSmall,
+                        borderWidth = borderWidth,
+                        textSizeMedium = textSizeMedium,
+                        textSizeHuge = textSizeHuge,
+                        surfaceContainerLight = surfaceContainerLight,
+                        surfaceContainerHighLight = surfaceContainerHighLight,
+                        onSurfaceLight = onSurfaceLight,
+                        outlineLight = outlineLight
                     )
                 }
             }
@@ -138,14 +199,24 @@ fun TierRow(
     compositions: List<Composition>,
     isExpanded: Boolean,
     onToggle: () -> Unit,
-    navController: NavController
+    navController: NavController,
+    paddingMedium: androidx.compose.ui.unit.Dp,
+    spacingMedium: androidx.compose.ui.unit.Dp,
+    imageSizeSmall: androidx.compose.ui.unit.Dp,
+    borderWidth: androidx.compose.ui.unit.Dp,
+    textSizeMedium: androidx.compose.ui.unit.TextUnit,
+    textSizeHuge: androidx.compose.ui.unit.TextUnit,
+    surfaceContainerLight: Color,
+    surfaceContainerHighLight: Color,
+    onSurfaceLight: Color,
+    outlineLight: Color
 ) {
     //Columna para que ocupe todo el ancho
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFEEEEEE))
-            .padding(12.dp)
+            .background(surfaceContainerLight)
+            .padding(paddingMedium)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -154,10 +225,10 @@ fun TierRow(
             //Letra del tier
             Text(
                 text = tier,
-                fontSize = 32.sp,
+                fontSize = textSizeHuge,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.padding(end = 16.dp)
+                color = onSurfaceLight,
+                modifier = Modifier.padding(end = paddingMedium)
             )
 
             Row(
@@ -176,40 +247,41 @@ fun TierRow(
                 //PlaceHolder de la imagen de la composicion
                 Box(
                     modifier = Modifier
-                        .size(60.dp)
-                        .background(Color.White)
-                        .border(1.dp, Color.Gray)
+                        .size(imageSizeSmall)
+                        .background(surfaceContainerHighLight)
+                        .border(borderWidth, outlineLight)
                 )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(paddingMedium))
 
                 //Nombre de la composición
                 Text(
                     text = compositions.firstOrNull()?.name ?: "Nombre de la composicion",
-                    fontSize = 16.sp,
-                    color = Color.Black
+                    fontSize = textSizeMedium,
+                    color = onSurfaceLight
                 )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(spacingMedium))
 
             //Icono para hacer mas grande o mas pequeño el tier
             Icon(
                 imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = if (isExpanded) "Colapsar" else "Expandir",
-                modifier = Modifier.clickable { onToggle() }
+                modifier = Modifier.clickable { onToggle() },
+                tint = onSurfaceLight
             )
         }
 
         //Comprobamos si se expande y si es mayor a 1 si es correcto muestra las demas composiciones
         if (isExpanded && compositions.size > 1) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(spacingMedium))
             compositions.drop(1).forEach { comp ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 48.dp, top = 8.dp)
+                        .padding(start = 48.dp, top = spacingMedium)
                         .clickable {
                             navController.navigate(
                                 Screen.CompositionDetail.createRoute(comp.name, comp.tier)
@@ -218,16 +290,16 @@ fun TierRow(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(60.dp)
-                            .background(Color.White)
-                            .border(1.dp, Color.Gray)
+                            .size(imageSizeSmall)
+                            .background(surfaceContainerHighLight)
+                            .border(borderWidth, outlineLight)
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(paddingMedium))
                     //Nombre de la composicion
                     Text(
                         text = comp.name,
-                        fontSize = 16.sp,
-                        color = Color.Black
+                        fontSize = textSizeMedium,
+                        color = onSurfaceLight
                     )
                 }
             }
