@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,6 +38,33 @@ data class Character(
 @Composable
 //Esta funcion es la encargada de printear por pantalla la lista de characters
 fun CharacterListScreen(navController: NavController) {
+    // Obtener el contexto para acceder a los recursos
+    val context = LocalContext.current
+    val resources = context.resources
+
+    // Cargar las dimensiones desde el XML
+    val paddingMedium = resources.getDimension(R.dimen.padding_medium).dp
+    val spacingSmall = resources.getDimension(R.dimen.spacing_small).dp
+    val spacingLarge = resources.getDimension(R.dimen.spacing_large).dp
+    val spacingExtraLarge = resources.getDimension(R.dimen.spacing_extra_large).dp
+    val imageSizeLarge = resources.getDimension(R.dimen.image_size_large).dp
+    val borderWidth = resources.getDimension(R.dimen.border_width).dp
+    val textSizeSmall = resources.getDimension(R.dimen.text_size_small).sp
+    val textSizeLarge = resources.getDimension(R.dimen.text_size_large).sp
+    val textSizeExtraLarge = resources.getDimension(R.dimen.text_size_extra_large).sp
+
+    // Cargar los colores desde el XML
+    val primaryLight = colorResource(id = R.color.primary_light)
+    val onPrimaryLight = colorResource(id = R.color.on_primary_light)
+    val backgroundLight = colorResource(id = R.color.background_light)
+    val onBackgroundLight = colorResource(id = R.color.on_background_light)
+    val surfaceContainerLight = colorResource(id = R.color.surface_container_light)
+    val surfaceContainerHighLight = colorResource(id = R.color.surface_container_high_light)
+    val onSurfaceLight = colorResource(id = R.color.on_surface_light)
+    val onSurfaceVariantLight = colorResource(id = R.color.on_surface_variant_light)
+    val outlineLight = colorResource(id = R.color.outline_light)
+    val tertiaryLight = colorResource(id = R.color.tertiary_light)
+
     //Esta variable guarda el texto de la barra de busqueda
     var searchText by remember { mutableStateOf("") }
 
@@ -103,61 +132,97 @@ fun CharacterListScreen(navController: NavController) {
     Scaffold(
         topBar = {
             //La barra superior
-            TopAppBar(
-                title = { Text("Character List") },
-                navigationIcon = {
-                    //Boton de volver atras
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
+            Surface(
+                color = primaryLight
+            ) {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Character List",
+                            color = onPrimaryLight
                         )
+                    },
+                    navigationIcon = {
+                        //Boton de volver atras
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = onPrimaryLight
+                            )
+                        }
                     }
-                }
-            )
-        }
+                )
+            }
+        },
+        containerColor = backgroundLight
     ) { paddingValues ->
         //Definimos un column para que este centrado todo igual
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(paddingMedium)
         ) {
             //Título
             Text(
                 text = "Character List",
-                fontSize = 24.sp,
+                fontSize = textSizeExtraLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
+                color = onBackgroundLight,
+                modifier = Modifier.padding(bottom = paddingMedium)
             )
 
             //Barra de búsqueda
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
-                    .background(Color(0xFFEEEEEE))
-                    .border(1.dp, Color.Black)
-                    .padding(4.dp)
+                    .padding(bottom = paddingMedium)
+                    .background(surfaceContainerHighLight)
+                    .border(borderWidth, outlineLight)
+                    .padding(spacingSmall)
             ) {
                 //Barra de texto para la busqueda de personajes
                 OutlinedTextField(
                     value = searchText,
                     onValueChange = { searchText = it },
-                    label = { Text("Buscar") },
+                    label = {
+                        Text(
+                            "Buscar",
+                            color = onSurfaceVariantLight
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = primaryLight,
+                        unfocusedBorderColor = outlineLight,
+                        focusedTextColor = onSurfaceLight,
+                        unfocusedTextColor = onSurfaceLight
+                    )
                 )
             }
 
             //Lista de personajes
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(spacingLarge)
             ) {
                 items(filteredCharacters) { character ->
-                    CharacterCard(character = character)
+                    CharacterCard(
+                        character = character,
+                        imageSizeLarge = imageSizeLarge,
+                        borderWidth = borderWidth,
+                        spacingSmall = spacingSmall,
+                        spacingLarge = spacingLarge,
+                        spacingExtraLarge = spacingExtraLarge,
+                        textSizeSmall = textSizeSmall,
+                        textSizeLarge = textSizeLarge,
+                        surfaceContainerLight = surfaceContainerLight,
+                        onSurfaceLight = onSurfaceLight,
+                        onSurfaceVariantLight = onSurfaceVariantLight,
+                        outlineLight = outlineLight,
+                        tertiaryLight = tertiaryLight
+                    )
                 }
             }
         }
@@ -166,19 +231,33 @@ fun CharacterListScreen(navController: NavController) {
 
 @Composable
 //Funcion para dibujar la tarjeta con la informacion del personaje detallada anteriormente
-fun CharacterCard(character: Character) {
+fun CharacterCard(
+    character: Character,
+    imageSizeLarge: androidx.compose.ui.unit.Dp,
+    borderWidth: androidx.compose.ui.unit.Dp,
+    spacingSmall: androidx.compose.ui.unit.Dp,
+    spacingLarge: androidx.compose.ui.unit.Dp,
+    spacingExtraLarge: androidx.compose.ui.unit.Dp,
+    textSizeSmall: androidx.compose.ui.unit.TextUnit,
+    textSizeLarge: androidx.compose.ui.unit.TextUnit,
+    surfaceContainerLight: Color,
+    onSurfaceLight: Color,
+    onSurfaceVariantLight: Color,
+    outlineLight: Color,
+    tertiaryLight: Color
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { /* TODO: Navigate to character details */ }
-            .border(1.dp, Color.Black),
+            .border(borderWidth, outlineLight),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFEEEEEE)
+            containerColor = surfaceContainerLight
         )
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(spacingLarge)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.Top
         ) {
@@ -187,26 +266,12 @@ fun CharacterCard(character: Character) {
                 painter = painterResource(id = character.imageResId),
                 contentDescription = character.name,
                 modifier = Modifier
-                    .size(90.dp)
-                    .border(1.dp, Color.Black),
+                    .size(imageSizeLarge)
+                    .border(borderWidth, outlineLight),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
-
-            //Texto del arma inicial
-            Text(
-                text = "Initial Weapon: ",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.DarkGray
-            )
-            Text(
-                text = character.initialWeapon,
-                fontSize = 13.sp,
-                color = Color(0xFF1976D2),
-                fontWeight = FontWeight.Medium
-            )
+            Spacer(modifier = Modifier.width(spacingExtraLarge))
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -214,18 +279,36 @@ fun CharacterCard(character: Character) {
                 //Nombre del personaje
                 Text(
                     text = character.name,
-                    fontSize = 18.sp,
+                    fontSize = textSizeLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = onSurfaceLight
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(spacingSmall))
+
+                //Texto del arma inicial
+                Row {
+                    Text(
+                        text = "Initial Weapon: ",
+                        fontSize = textSizeSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = onSurfaceVariantLight
+                    )
+                    Text(
+                        text = character.initialWeapon,
+                        fontSize = textSizeSmall,
+                        color = tertiaryLight,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(spacingSmall))
 
                 //Descripción del personaje
                 Text(
                     text = character.description,
-                    fontSize = 14.sp,
-                    color = Color.Black,
+                    fontSize = textSizeSmall,
+                    color = onSurfaceLight,
                     lineHeight = 20.sp
                 )
             }
