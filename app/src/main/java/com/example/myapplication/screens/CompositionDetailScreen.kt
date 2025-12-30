@@ -21,12 +21,17 @@ import androidx.navigation.NavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompositionDetailScreen(
+    //Controlador para ir hacia otras pantallas o volver a la pantalla anterior
     navController: NavController,
+    //Nombre de la composicion que estamos mostrando
     compositionName: String,
+    //Mostramos el tier al que pertenece la composicion
     tier: String
 ) {
+    //Hacemos un scaffold para mostrar los componentes por pantalla organizados como queremos
     Scaffold(
         topBar = {
+            //Bara superior de la pantalla
             TopAppBar(
                 title = { Text(compositionName) },
                 navigationIcon = {
@@ -39,14 +44,16 @@ fun CompositionDetailScreen(
                 }
             )
         }
+        //Nos asseguramos de que el contenido quede por detras de la barra si la deslizamos
     ) { paddingValues ->
+        //Añadimos la columna para que este todo centrado
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Título con el nombre de la composición
+            //Titulo de la composicion
             Text(
                 text = compositionName,
                 fontSize = 24.sp,
@@ -55,7 +62,7 @@ fun CompositionDetailScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Sección principal con fondo gris y borde negro
+            //Creamos un card para que se distinga la informacion del fondo
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -67,14 +74,14 @@ fun CompositionDetailScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    // Fila superior: Tier letter + imagen de composición + "Items"
+                    //Creamos una hilera para que este en linea la letra y la imagen
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Letra del tier
+                        //Letra de que tier es
                         Text(
                             text = tier,
                             fontSize = 32.sp,
@@ -83,7 +90,7 @@ fun CompositionDetailScreen(
                             modifier = Modifier.padding(end = 16.dp)
                         )
 
-                        // Cuadrado blanco (placeholder para imagen de composición)
+                        //PlaceHolder para la imagen de la composicion
                         Box(
                             modifier = Modifier
                                 .size(80.dp)
@@ -93,7 +100,7 @@ fun CompositionDetailScreen(
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        // Texto "Items"
+                        //Texto Items para que el jugador sepa que es lo que va a ver debajo
                         Text(
                             text = "Items",
                             fontSize = 20.sp,
@@ -102,13 +109,14 @@ fun CompositionDetailScreen(
                         )
                     }
 
-                    // Cuadrícula de ítems (3 filas x 6 columnas = 18 cuadrados)
+                    //Creamos una cuadricula 3 x 6 para poner las imagenes de los items correctamente y organizadas
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(6),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        //Creamos las 18 casillas que tendremos para añadir todos los items
                         items(18) { index ->
                             ItemSlot(index = index)
                         }
@@ -120,6 +128,7 @@ fun CompositionDetailScreen(
 }
 
 @Composable
+//Funcion para definir la forma que tendra la casilla de la imagen de cada slot de la cuadricula
 fun ItemSlot(index: Int) {
     Box(
         modifier = Modifier
@@ -130,8 +139,5 @@ fun ItemSlot(index: Int) {
                 // TODO: Agregar/ver ítem
             },
         contentAlignment = Alignment.Center
-    ) {
-        // Placeholder - aquí se cargaría la imagen del ítem desde drawable
-        // Image(painter = painterResource(id = R.drawable.item_image), ...)
-    }
+    ) {    }
 }
