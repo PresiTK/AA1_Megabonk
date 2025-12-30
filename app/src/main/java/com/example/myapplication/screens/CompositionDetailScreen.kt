@@ -13,10 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,22 +31,57 @@ fun CompositionDetailScreen(
     //Mostramos el tier al que pertenece la composicion
     tier: String
 ) {
+    // Obtener el contexto para acceder a los recursos
+    val context = LocalContext.current
+    val resources = context.resources
+
+    // Cargar las dimensiones desde el XML
+    val paddingMedium = resources.getDimension(R.dimen.padding_medium).dp
+    val spacingMedium = resources.getDimension(R.dimen.spacing_medium).dp
+    val imageSizeMedium = resources.getDimension(R.dimen.image_size_medium).dp
+    val itemSlotSize = resources.getDimension(R.dimen.item_slot_size).dp
+    val borderWidth = resources.getDimension(R.dimen.border_width).dp
+    val textSizeLarge = resources.getDimension(R.dimen.text_size_large).sp
+    val textSizeExtraLarge = resources.getDimension(R.dimen.text_size_extra_large).sp
+    val textSizeHuge = resources.getDimension(R.dimen.text_size_huge).sp
+
+    // Cargar los colores desde el XML
+    val primaryLight = colorResource(id = R.color.primary_light)
+    val onPrimaryLight = colorResource(id = R.color.on_primary_light)
+    val backgroundLight = colorResource(id = R.color.background_light)
+    val onBackgroundLight = colorResource(id = R.color.on_background_light)
+    val surfaceContainerLight = colorResource(id = R.color.surface_container_light)
+    val surfaceContainerHighLight = colorResource(id = R.color.surface_container_high_light)
+    val onSurfaceLight = colorResource(id = R.color.on_surface_light)
+    val outlineLight = colorResource(id = R.color.outline_light)
+
     //Hacemos un scaffold para mostrar los componentes por pantalla organizados como queremos
     Scaffold(
         topBar = {
             //Bara superior de la pantalla
-            TopAppBar(
-                title = { Text(compositionName) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
+            Surface(
+                color = primaryLight
+            ) {
+                TopAppBar(
+                    title = {
+                        Text(
+                            compositionName,
+                            color = onPrimaryLight
                         )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = onPrimaryLight
+                            )
+                        }
                     }
-                }
-            )
-        }
+                )
+            }
+        },
+        containerColor = backgroundLight
         //Nos asseguramos de que el contenido quede por detras de la barra si la deslizamos
     ) { paddingValues ->
         //Añadimos la columna para que este todo centrado
@@ -51,74 +89,80 @@ fun CompositionDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(paddingMedium)
         ) {
             //Titulo de la composicion
             Text(
                 text = compositionName,
-                fontSize = 24.sp,
+                fontSize = textSizeExtraLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
+                color = onBackgroundLight,
+                modifier = Modifier.padding(bottom = paddingMedium)
             )
 
             //Creamos un card para que se distinga la informacion del fondo
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color.Black),
+                    .border(borderWidth, outlineLight),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFFEEEEEE)
+                    containerColor = surfaceContainerLight
                 )
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(paddingMedium)
                 ) {
                     //Creamos una hilera para que este en linea la letra y la imagen
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp),
+                            .padding(bottom = paddingMedium),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         //Letra de que tier es
                         Text(
                             text = tier,
-                            fontSize = 32.sp,
+                            fontSize = textSizeHuge,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                            modifier = Modifier.padding(end = 16.dp)
+                            color = onSurfaceLight,
+                            modifier = Modifier.padding(end = paddingMedium)
                         )
 
                         //PlaceHolder para la imagen de la composicion
                         Box(
                             modifier = Modifier
-                                .size(80.dp)
-                                .background(Color.White)
-                                .border(1.dp, Color.Black)
+                                .size(imageSizeMedium)
+                                .background(surfaceContainerHighLight)
+                                .border(borderWidth, outlineLight)
                         )
 
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(paddingMedium))
 
                         //Texto Items para que el jugador sepa que es lo que va a ver debajo
                         Text(
                             text = "Items",
-                            fontSize = 20.sp,
+                            fontSize = textSizeLarge,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                            color = onSurfaceLight
                         )
                     }
 
                     //Creamos una cuadricula 3 x 6 para poner las imagenes de los items correctamente y organizadas
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(6),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(spacingMedium),
+                        verticalArrangement = Arrangement.spacedBy(spacingMedium),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         //Creamos las 18 casillas que tendremos para añadir todos los items
                         items(18) { index ->
-                            ItemSlot(index = index)
+                            ItemSlot(
+                                index = index,
+                                itemSlotSize = itemSlotSize,
+                                borderWidth = borderWidth,
+                                surfaceContainerHighLight = surfaceContainerHighLight,
+                                outlineLight = outlineLight
+                            )
                         }
                     }
                 }
@@ -129,12 +173,18 @@ fun CompositionDetailScreen(
 
 @Composable
 //Funcion para definir la forma que tendra la casilla de la imagen de cada slot de la cuadricula
-fun ItemSlot(index: Int) {
+fun ItemSlot(
+    index: Int,
+    itemSlotSize: androidx.compose.ui.unit.Dp,
+    borderWidth: androidx.compose.ui.unit.Dp,
+    surfaceContainerHighLight: Color,
+    outlineLight: Color
+) {
     Box(
         modifier = Modifier
-            .size(55.dp)
-            .background(Color.White)
-            .border(1.dp, Color.Black)
+            .size(itemSlotSize)
+            .background(surfaceContainerHighLight)
+            .border(borderWidth, outlineLight)
             .clickable {
                 // TODO: Agregar/ver ítem
             },
