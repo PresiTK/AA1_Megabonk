@@ -1,10 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
+    //Colores Principales Light Mode
+    <color name="primary_light">#FF276A49</color>
+    <color name="on_primary_light">#FFFFFFFF</color>
+    <color name="primary_container_light">#FFADF2C7</color>
+    <color name="on_primary_container_light">#FF055232</color>
+
+    <color name="secondary_light">#FF4E6355</color>
+    <color name="on_secondary_light">#FFFFFFFF</color>
+    <color name="secondary_container_light">#FFD0E8D6</color>
+    <color name="on_secondary_container_light">#FF374B3E</color>
+
+    <color name="tertiary_light">#FF3C6471</color>
+    <color name="on_tertiary_light">#FFFFFFFF</color>
+    <color name="tertiary_container_light">#FFBFE9F9</color>
+    <color name="on_tertiary_container_light">#FF224C59</color>
+
+    //Colores Error Light Mode
+
+    <color name="error_light">#FFBA1A1A</color>
+    <color name="on_error_light">#FFFFFFFF</color>
+    <color name="error_container_light">#FFFFDAD6</color>
+    <color name="on_error_container_light">#FF93000A</color>
+
+    //Colores Fondo Light Mode
+
+    <color name="background_light">#FFF6FBF4</color>
+    <color name="on_background_light">#FF171D19</color>
+
+    <color name="surface_light">#FFF6FBF4</color>
+    <color name="on_surface_light">#FF171D19</color>
+
+    <color name="surface_variant_light">#FFDCE5DC</color>
+    <color name="on_surface_variant_light">#FF404942</color>
+
+    <color name="surface_dim_light">#FFD6DBD5</color>
+    <color name="surface_bright_light">#FFF6FBF4</color>
+
+    <color name="surface_container_lowest_light">#FFFFFFFF</color>
+    <color name="surface_container_low_light">#FFF0F5EE</color>
+    <color name="surface_container_light">#FFEAEFE9</color>
+    <color name="surface_container_high_light">#FFE4EAE3</color>
+    <color name="surface_container_highest_light">#FFDFE4DD</color>
+
+    //Colores Outline Light Mode
+
+    <color name="outline_light">#FF717972</color>
+    <color name="outline_variant_light">#FFC0C9C0</color>
+
+    //Colores Inverse Light Mode
+
+    <color name="inverse_surface_light">#FF2C322D</color>
+    <color name="inverse_on_surface_light">#FFEDF2EB</color>
+    <color name="inverse_primary_light">#FF91D5AC</color>
+
+    <color name="scrim_light">#FF000000</color>
+
+    //Colores Principales Dark Mode
+
+    <color name="primary_dark">#FF91D5AC</color>
+    <color name="on_primary_dark">#FF003921</color>
+    <color name="primary_container_dark">#FF055232</color>
+    <color name="on_primary_container_dark">#FFADF2C7</color>
+
+    <color name="secondary_dark">#FFB5CCBB</color>
+    <color name="on_secondary_dark">#FF213528</color>
+    <color name="secondary_container_dark">#FF374B3E</color>
+    <color name="on_secondary_container_dark">#FFD0E8D6</color>
+
+    <color name="tertiary_dark">#FFA4CDDC</color>
+    <color name="on_tertiary_dark">#FF043541</color>
+    <color name="tertiary_container_dark">#FF224C59</color>
+    <color name="on_tertiary_container_dark">#FFBFE9F9</color>
+
+    //Colores error Dark Mode
+
+    <color name="error_dark">#FFFFB4AB</color>
+    <color name="on_error_dark">#FF690005</color>
+    <color name="error_container_dark">#FF93000A</color>
+    <color name="on_error_container_dark">#FFFFDAD6</color>
+
+    //Colores fondo Dark Mode
+
+    <color name="background_dark">#FF0F1511</color>
+    <color name="on_background_dark">#FFDFE4DD</color>
+
+    <color name="surface_dark">#FF0F1511</color>
+    <color name="on_surface_dark">#FFDFE4DD</color>
+
+    <color name="surface_variant_dark">#FF404942</color>
+    <color name="on_surface_variant_dark">#FFC0C9C0</color>
+
+    <color name="surface_dim_dark">#FF0F1511</color>
+    <color name="surface_bright_dark">#FF353B36</color>
+
+    <color name="surface_container_lowest_dark">#FF0A0F0C</color>
+    <color name="surface_container_low_dark">#FF171D19</color>
+    <color name="surface_container_dark">#FF1B211D</color>
+    <color name="surface_container_high_dark">#FF262B27</color>
+    <color name="surface_container_highest_dark">#FF303632</color>
+
+    //Colores outline Dark Mode
+
+    <color name="outline_dark">#FF8A938B</color>
+    <color name="outline_variant_dark">#FF404942</color>
+
+    //Colores inverse Dark Mode
+
+    <color name="inverse_surface_dark">#FFDFE4DD</color>
+    <color name="inverse_on_surface_dark">#FF2C322D</color>
+    <color name="inverse_primary_dark">#FF276A49</color>
+
+    <color name="scrim_dark">#FF000000</color>
+
+
 </resources>

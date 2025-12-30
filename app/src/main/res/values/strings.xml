@@ -1,3 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">BonkAPIM</string>
+
+    //Navegación
+     <string name="back">Atrás</string>
+    <string name="menu">Menú</string>
+
+    //Pantallas
+    <string name="home_title">BonkAPIM</string>
+    <string name="login_title">Login</string>
+    <string name="register_title">Register</string>
+    <string name="welcome_title">Welcome to BonkAPIM</string>
+    <string name="welcome_message">Welcome!</string>
+    <string name="comps_list_title">Comps List</string>
+    <string name="item_list_title">Item List</string>
+    <string name="character_list_title">Character List</string>
+    <string name="weapon_list_title">Weapon List</string>
+    <string name="tomes_list_title">Tomes List</string>
+
+    //formularios
+    <string name="email_label">Correo electrónico</string>
+    <string name="password_label">Contraseña</string>
+    <string name="confirm_password_label">Confirmar contraseña</string>
+    <string name="full_name_label">Nombre y apellido</string>
+    <string name="nickname_label">Apodo</string>
+    <string name="search_label">Buscar</string>
+
+    //Botones
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="register_link">register</string>
+
+    //Menu
+    <string name="menu_comps_list">Comps List</string>
+    <string name="menu_item_list">Item List</string>
+    <string name="menu_character_list">Character List</string>
+    <string name="menu_weapon_list">Weapon List</string>
+    <string name="menu_tomes_list">Tomes List</string>
+
+    //otros
+    <string name="tier_list_header">MegaBonk Comps Tier List</string>
+    <string name="composition_placeholder">Nombre de la composicion</string>
+    <string name="items_label">Items</string>
+    <string name="expand">Expandir</string>
+    <string name="collapse">Colapsar</string>
 </resources>
