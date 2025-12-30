@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,15 +14,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.R
 
 data class Item(
     val name: String,
     val description: String,
-    val imageName: String? = null
+    val imageResId: Int
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,31 +33,73 @@ data class Item(
 fun ItemListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
 
-    // Datos de ejemplo - puedes reemplazar con tus datos reales
     val items = listOf(
         Item(
             name = "Moldy Cheese",
-            description = "+40% chance to poison enemies on hit."
+            description = "+40% chance to poison enemies on hit.",
+            imageResId = R.drawable.moldy_cheese
+
         ),
         Item(
             name = "Brass Knuckles",
-            description = "+15 damage to melee attacks."
+            description = "+15 damage to melee attacks.",
+            imageResId = R.drawable.brass_knuckles
+
         ),
         Item(
             name = "Overpowered Lamp",
-            description = "Illuminates dark areas and deals 50 damage to enemies nearby."
+            description = "Illuminates dark areas and deals 50 damage to enemies nearby.",
+            imageResId = R.drawable.lamp
+
         ),
         Item(
-            name = "Magic Potion",
-            description = "Restores 100 HP instantly."
+            name = "Borgar",
+            description = "+2% chance to spawn Borgar upon killing an enemy.",
+            imageResId = R.drawable.borgar
+
         ),
         Item(
-            name = "Ancient Scroll",
-            description = "+25% XP gain from all sources."
-        )
+            name = "Clover",
+            description = "Increase Luck by +7.5%.",
+            imageResId = R.drawable.clover
+        ),
+        Item(
+            name = "Gym Sauce",
+            description = "Increase Damage by +10%.",
+            imageResId = R.drawable.gym_sauce
+        ),
+        Item(
+            name = "Ghost",
+            description = "Using an interactable summons ghosts.",
+            imageResId = R.drawable.ghost
+        ),
+        Item(
+            name = "Campfire",
+            description = "Standing still heals you.",
+            imageResId = R.drawable.campfire
+        ),
+        Item(
+            name = "Slurp Gloves",
+            description = "Cast blood magic upon hitting an enemy, damaging nearby enemies and healing you for 7.5%. 9s cooldown.",
+            imageResId = R.drawable.slurp_gloves
+        ),
+        Item(
+            name = "Mirror",
+            description = "Reflect any incoming damage back to the attacker, and gain a short invulnerability.",
+            imageResId = R.drawable.mirror
+        ),
+        Item(
+            name = "Bob (Dead)",
+            description = "For every 14 units moved, summon Bob (he's dead).",
+            imageResId = R.drawable.bob
+        ),
+        Item(
+            name = "Backpack",
+            description = "+1 Projectile Count for all Weapons.",
+            imageResId = R.drawable.backpack
+        ),
     )
 
-    // Filtrar ítems según la búsqueda
     val filteredItems = if (searchText.isEmpty()) {
         items
     } else {
@@ -81,7 +127,6 @@ fun ItemListScreen(navController: NavController) {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Título
             Text(
                 text = "Item List",
                 fontSize = 24.sp,
@@ -90,7 +135,6 @@ fun ItemListScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Barra de búsqueda
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +152,6 @@ fun ItemListScreen(navController: NavController) {
                 )
             }
 
-            // Lista de ítems
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -137,21 +180,21 @@ fun ItemCard(item: Item) {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Cuadrado blanco (placeholder para imagen)
-            Box(
+
+            Image(
+                painter = painterResource(id = item.imageResId),
+                contentDescription = item.name,
                 modifier = Modifier
-                    .size(70.dp)
-                    .background(Color.White)
-                    .border(1.dp, Color.Gray)
+                    .size(90.dp)
+                    .border(1.dp, Color.Black),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Información del ítem
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                // Nombre del ítem
                 Text(
                     text = item.name,
                     fontSize = 18.sp,
@@ -161,7 +204,6 @@ fun ItemCard(item: Item) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Descripción del ítem
                 Text(
                     text = item.description,
                     fontSize = 14.sp,
@@ -170,4 +212,6 @@ fun ItemCard(item: Item) {
             }
         }
     }
+
 }
+

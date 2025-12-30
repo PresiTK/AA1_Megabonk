@@ -1,6 +1,7 @@
 package com.example.myapplication.screens
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,15 +15,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.R
 
 data class Character(
     val name: String,
+    val initialWeapon: String,
     val description: String,
-    val imageName: String? = null
+    val imageResId: Int
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,31 +35,61 @@ data class Character(
 fun CharacterListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
 
-    // Datos de ejemplo - puedes reemplazar con tus datos reales
+
     val characters = listOf(
         Character(
             name = "Monke",
-            description = "A mysterious monkey with incredible agility and banana-throwing skills."
+            initialWeapon = "Banana",
+            description = "Climb up walls. Also gain +2 Max HP per level.",
+            imageResId = R.drawable.monke
+
         ),
         Character(
             name = "Calcium",
-            description = "Strong bones, strong will. This skeleton warrior never gives up."
+            initialWeapon = "Bone",
+            description = "Speed builds up over time, but is halved when you take damage. Also gain damage based on speed.",
+            imageResId = R.drawable.calcium
         ),
         Character(
             name = "Sir Oofie",
-            description = "No one knows where he got the shades. No one asks."
+            initialWeapon = "Sword",
+            description = "Gain 1% Armor per level.",
+            imageResId = R.drawable.siroofie
         ),
         Character(
-            name = "Dark Knight",
-            description = "A fallen hero who now fights for redemption in the shadows."
+            name = "Bandit",
+            initialWeapon = "Dexecutioner",
+            description = "Gain 1% Attack Speed per level.",
+            imageResId = R.drawable.bandit
         ),
         Character(
-            name = "Wizard Pete",
-            description = "Master of arcane arts with a peculiar fondness for cheese."
+            name = "Megachad",
+            initialWeapon = "Aura",
+            description = "Flex to stop damage. Cooldown -0.2s per level. Gain 2.5% Damage when flexing.",
+            imageResId = R.drawable.megachad
+        ),
+        Character(
+            name = "Fox",
+            initialWeapon = "Firestaff",
+            description = "Gain 2% Luck per level.",
+            imageResId = R.drawable.fox
+        ),
+        Character(
+            name = "Ogre",
+            initialWeapon = "Axe",
+            description = "Gain 1.5% Damage per level.",
+            imageResId = R.drawable.ogre
+        ),
+        Character(
+            name = "CL4NK",
+            initialWeapon = "Rvolver",
+            description = "Gain 1% Crit Chance per level.",
+            imageResId = R.drawable.cl4nk
         )
+
     )
 
-    // Filtrar personajes según la búsqueda
+
     val filteredCharacters = if (searchText.isEmpty()) {
         characters
     } else {
@@ -138,17 +173,30 @@ fun CharacterCard(character: Character) {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.Top
         ) {
-            // Cuadrado blanco (placeholder para imagen)
-            Box(
+            Image(
+                painter = painterResource(id = character.imageResId),
+                contentDescription = character.name,
                 modifier = Modifier
                     .size(90.dp)
-                    .background(Color.White)
-                    .border(1.dp, Color.Black)
+                    .border(1.dp, Color.Black),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Información del personaje
+            Text(
+                text = "Initial Weapon: ",
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.DarkGray
+            )
+            Text(
+                text = character.initialWeapon,
+                fontSize = 13.sp,
+                color = Color(0xFF1976D2),
+                fontWeight = FontWeight.Medium
+            )
+
             Column(
                 modifier = Modifier.weight(1f)
             ) {

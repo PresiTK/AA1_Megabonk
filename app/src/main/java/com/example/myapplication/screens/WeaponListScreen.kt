@@ -29,7 +29,7 @@ data class Weapon(
 fun WeaponListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
 
-    // Datos de ejemplo - puedes reemplazar con tus datos reales
+    //Datos de armas
     val weapons = listOf(
         Weapon(
             name = "Axe",

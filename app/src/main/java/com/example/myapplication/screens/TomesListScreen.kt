@@ -29,7 +29,7 @@ data class Tome(
 fun TomesListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
 
-    // Datos de ejemplo - puedes reemplazar con tus datos reales
+    // Datos de tomos
     val tomes = listOf(
         Tome(
             name = "Quantity Tome",
