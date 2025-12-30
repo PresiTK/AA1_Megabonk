@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,15 +14,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.R
 
 data class Weapon(
     val name: String,
     val description: String,
-    val imageName: String? = null
+    val imageResId: Int
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,31 +33,39 @@ data class Weapon(
 fun WeaponListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
 
-    //Datos de armas
     val weapons = listOf(
         Weapon(
             name = "Axe",
-            description = "Throw spinning axes that deal area damage."
+            description = "Throw spinning axes that deal area damage.",
+            imageResId = R.drawable.axe
+
         ),
         Weapon(
             name = "Aura",
-            description = "Emit a powerful aura that damages all nearby enemies continuously."
+            description = "Damage enemies in an area around you.",
+            imageResId = R.drawable.aura
+
         ),
         Weapon(
             name = "Lightning Staff",
-            description = "Channel lightning bolts that strike random enemies with devastating power."
+            description = "Summons lightning to smite nearby enemies.",
+            imageResId = R.drawable.lightning_staff
+
         ),
         Weapon(
-            name = "Fire Sword",
-            description = "A legendary blade engulfed in eternal flames, leaving a trail of fire in its wake."
+            name = "Dexecutioner",
+            description = "A piercing blade. Small chance to instantly execute an enemy.",
+            imageResId = R.drawable.dexecutioner
+
         ),
         Weapon(
-            name = "Ice Bow",
-            description = "Shoots arrows that freeze enemies on impact, slowing their movement speed."
+            name = "Bananarang",
+            description = "Throws bananas that return to the owner.",
+            imageResId = R.drawable.bananarang
+
         )
     )
 
-    // Filtrar armas según la búsqueda
     val filteredWeapons = if (searchText.isEmpty()) {
         weapons
     } else {
@@ -81,7 +93,6 @@ fun WeaponListScreen(navController: NavController) {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Título
             Text(
                 text = "Weapon List",
                 fontSize = 24.sp,
@@ -90,7 +101,6 @@ fun WeaponListScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Barra de búsqueda
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +118,6 @@ fun WeaponListScreen(navController: NavController) {
                 )
             }
 
-            // Lista de armas
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -137,21 +146,20 @@ fun WeaponCard(weapon: Weapon) {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.Top
         ) {
-            // Cuadrado blanco (placeholder para imagen)
-            Box(
+            Image(
+                painter = painterResource(id = weapon.imageResId),
+                contentDescription = weapon.name,
                 modifier = Modifier
                     .size(90.dp)
-                    .background(Color.White)
-                    .border(1.dp, Color.Black)
+                    .border(1.dp, Color.Black),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Información del arma
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                // Nombre del arma
                 Text(
                     text = weapon.name,
                     fontSize = 18.sp,
@@ -161,7 +169,6 @@ fun WeaponCard(weapon: Weapon) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Descripción del arma
                 Text(
                     text = weapon.description,
                     fontSize = 14.sp,

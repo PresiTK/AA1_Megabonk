@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,15 +14,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.R
 
 data class Tome(
     val name: String,
     val description: String,
-    val imageName: String? = null
+    val imageResId: Int
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,31 +33,39 @@ data class Tome(
 fun TomesListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
 
-    // Datos de tomos
     val tomes = listOf(
         Tome(
             name = "Quantity Tome",
-            description = "+Projectile Count - Increases the number of attacks / projectiles."
+            description = "+Projectile Count - Increases the number of attacks / projectiles.",
+            imageResId = R.drawable.quantity_tome
+
         ),
         Tome(
             name = "Damage Tome",
-            description = "+Damage - Increases the base damage dealt by all attacks."
+            description = "+Damage - Increases the base damage dealt by all attacks.",
+            imageResId = R.drawable.damage_tome
+
         ),
         Tome(
             name = "Cooldown Tome",
-            description = "-Cooldown - Reduces the time between attacks, allowing for faster combat."
+            description = "-Cooldown - Reduces the time between attacks, allowing for faster combat.",
+            imageResId = R.drawable.coldown
+
         ),
         Tome(
-            name = "Range Tome",
-            description = "+Range - Extends the reach of all projectiles and area effects."
+            name = "Size Tome",
+            description = "+Size - The size of your attacks, projectiles, explosions, and more.",
+            imageResId = R.drawable.size
+
         ),
         Tome(
-            name = "Speed Tome",
-            description = "+Projectile Speed - Makes all projectiles travel faster towards enemies."
+            name = "Shield Tome",
+            description = "+Shield - Shield takes damage instead of losing HP before it breaks. Shield regenerates quickly after not taking damage for a while",
+            imageResId = R.drawable.shield
+
         )
     )
 
-    // Filtrar tomos según la búsqueda
     val filteredTomes = if (searchText.isEmpty()) {
         tomes
     } else {
@@ -81,7 +93,6 @@ fun TomesListScreen(navController: NavController) {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Título
             Text(
                 text = "Tomes List",
                 fontSize = 24.sp,
@@ -90,7 +101,6 @@ fun TomesListScreen(navController: NavController) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Barra de búsqueda
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +118,6 @@ fun TomesListScreen(navController: NavController) {
                 )
             }
 
-            // Lista de tomos
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -137,21 +146,20 @@ fun TomeCard(tome: Tome) {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.Top
         ) {
-            // Cuadrado blanco (placeholder para imagen)
-            Box(
+            Image(
+                painter = painterResource(id = tome.imageResId),
+                contentDescription = tome.name,
                 modifier = Modifier
                     .size(90.dp)
-                    .background(Color.White)
-                    .border(1.dp, Color.Black)
+                    .border(1.dp, Color.Black),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Información del tomo
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                // Nombre del tomo
                 Text(
                     text = tome.name,
                     fontSize = 18.sp,
@@ -161,7 +169,6 @@ fun TomeCard(tome: Tome) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Descripción del tomo
                 Text(
                     text = tome.description,
                     fontSize = 14.sp,
